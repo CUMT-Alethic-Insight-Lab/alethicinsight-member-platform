@@ -1,15 +1,15 @@
 # alethicinsight-cli
 
-Alethic Insight 成员平台的内部 infra 接口包，位于 `member-platform/infra/interface/alethicinsight-cli`。CLI 与本地 stdio MCP 共用一个发行包 `alethicinsight-cli` 和版本，安装后提供两个命令入口。Python 3.10+，运行时只使用标准库，不依赖 keyring、考试 app 或考试测试配置。不复用网页 Bearer session，不提供管理员审批或直接最终提交。
+Alethic Insight 成员平台的内部 infra 接口包，位于 `infra/interface/alethicinsight-cli`。CLI 与本地 stdio MCP 共用一个发行包 `alethicinsight-cli` 和版本，安装后提供两个命令入口。Python 3.10+，运行时只使用标准库，不依赖 keyring、考试 app 或考试测试配置。不复用网页 Bearer session，不提供管理员审批或直接最终提交。
 
-这是同仓成员平台拆分的第一阶段接口归属；移动客户端及独立包测试不代表成员服务的数据库、账号或启动流程已经与考试服务隔离。服务端隔离需另行审查，本文不指定生产服务地址。
+本包属于独立成员仓 `alethicinsight-member-platform`，不是独立 MCP 产品，也不包含考试服务。服务端独立安装/启动说明见 [成员产品 README](../../../README.md)，详细授权和 Host 配置见 [运行手册](../../../docs/AGENT_INTERFACE_MVP.md)。本文不指定生产服务地址，不声称已发布包或已完成真实 Host 验收。
 
 ## 安装与用法
 
 从仓库根目录安装到专用虚拟环境（先创建并激活环境）：
 
 ```sh
-python -m pip install ./member-platform/infra/interface/alethicinsight-cli
+python -m pip install ./infra/interface/alethicinsight-cli
 ```
 
 没有默认 base；使用前必须显式配置成员服务地址。下列地址**仅为本地开发示例**，须先独立启动相应成员服务；安装包不会启动服务。base 不含 `/api/v1`，保留服务实际使用的路径前缀（若有）。
@@ -24,7 +24,11 @@ export ALETHICINSIGHT_API_BASE_URL=http://localhost:8902
 $env:ALETHICINSIGHT_API_BASE_URL = 'http://localhost:8902'
 ```
 
+首次登录前，先在仓库根目录运行以下命令，显式创建仓库外全新私有 `ALETHICINSIGHT_CONFIG_DIR`；不要读取或复制默认/历史凭据。后续命令在同一终端运行，MCP Host 使用同一目录。**登录必须由本人在 Agent/MCP 会话外完成**，在可信成员网页核对授权，再将一次性 code 输入 CLI 隐藏提示，不把凭据交给 Agent。
+
 ```sh
+export ALETHICINSIGHT_CONFIG_DIR="$(python -c 'from pathlib import Path; import tempfile; root = Path.cwd().resolve(); base = Path(tempfile.gettempdir()).resolve(); assert base != root and root not in base.parents; print(tempfile.mkdtemp(prefix="alethicinsight-member-", dir=base))')"
+test -n "$ALETHICINSIGHT_CONFIG_DIR" || exit 1
 alethicinsight-cli auth login
 alethicinsight-cli auth status --json
 alethicinsight-cli auth scopes --json
@@ -52,7 +56,7 @@ alethicinsight-mcp
 
 ## 登录与本地凭据
 
-登录打开 `{base}/org?cli_request=REQUEST_ID&scopes=...`。请仅在可信网页完成现有网页登录和授权，再把一次性 code 输入 CLI 隐藏提示。CLI 不索取网页 token、密码或 confirmation token。通过 `POST /api/v1/auth/cli/token` 交换短时凭据。
+登录前按 [infra 说明](../../README.md#隔离凭据与登录)创建仓库外全新私有 `ALETHICINSIGHT_CONFIG_DIR`，不要使用默认目录或读取/复制历史凭据。登录打开 `{base}/org?cli_request=REQUEST_ID&scopes=...`。请仅在可信网页完成现有网页登录和授权，再把一次性 code 输入 CLI 隐藏提示。CLI 不索取网页 token、密码或 confirmation token。通过 `POST /api/v1/auth/cli/token` 交换短时凭据。
 
 `--non-interactive` 或非 TTY 登录返回 `AUTH_REQUIRED`（3）及授权 URL，不打开浏览器、不等待输入。浏览器无法打开（包括返回 False）时提示手动打开。其他命令从不自动登录。
 
@@ -89,10 +93,10 @@ MCP 启动与 `tools/list` 不要求连接服务。调用工具时通过相同�
 
 `--json` / `--non-interactive` 可放在命令前后；JSON 模式 stdout 严格一个 JSON 值（`--help` 除外）。诊断仅 stderr，错误不原样回显服务端正文。退出码：0 成功；2 参数或配置错误；3 未认证/过期；4 无权限；5 I/O 或 API 不可用；6 校验失败；7 状态冲突或必须网页确认。
 
-从仓库根目录进入包目录，在专用开发虚拟环境执行完整包测试，不需要安装或启动根目录 `server`，也不加载其 `conftest.py`：
+从仓库根目录进入包目录，在专用开发虚拟环境执行完整包测试，不需要安装或启动本仓 `server/` 或考试源码，也不加载服务端的 `conftest.py`：
 
 ```sh
-cd member-platform/infra/interface/alethicinsight-cli
+cd infra/interface/alethicinsight-cli
 python -m pip install '.[test]'
 python -m pytest -q
 python -m pip wheel --no-deps . --wheel-dir dist

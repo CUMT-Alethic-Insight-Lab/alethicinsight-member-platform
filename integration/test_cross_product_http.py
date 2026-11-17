@@ -14,7 +14,7 @@ from urllib.request import build_opener, ProxyHandler, Request
 import pytest
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[1]
 ADMIN_ID = "09990000"
 MEMBER_ID = "09990001"
 OS_ENV_KEYS = {
@@ -116,11 +116,25 @@ class LiveService:
 
 
 @pytest.fixture
-def separate_products(tmp_path):
+def exam_server():
+    source = os.environ.get("EXAM_PLATFORM_SOURCE", "").strip()
+    if not source:
+        pytest.fail("Set EXAM_PLATFORM_SOURCE to the exam platform checkout root; see integration/README.md")
+    checkout = Path(source).expanduser().resolve()
+    server = checkout / "server"
+    if checkout == ROOT or not all((server / path).is_file() for path in (
+        "app/main.py", "app/routes/campaigns.py", "app/routes/exam.py",
+    )):
+        pytest.fail(f"EXAM_PLATFORM_SOURCE must point to a separate exam platform checkout root: {checkout}")
+    return server
+
+
+@pytest.fixture
+def separate_products(tmp_path, exam_server):
     exam_data = tmp_path / "exam"
     member_data = tmp_path / "member"
     exam_key, member_key = secrets.token_urlsafe(48), secrets.token_urlsafe(48)
-    exam = LiveService(ROOT / "server", exam_data, {
+    exam = LiveService(exam_server, exam_data, {
         "ALE_THIC_DATA_DIR": str(exam_data),
         "ALE_THIC_DB_PATH": str(exam_data / "service.db"),
         "ALE_THIC_ROLE": "authoritative",
@@ -131,7 +145,7 @@ def separate_products(tmp_path):
         "ARCHIVE_ENABLED": "0",
         "ALE_THIC_CAPTCHA_ENABLED": "0",
     })
-    member = LiveService(ROOT / "member-platform" / "server", member_data, {
+    member = LiveService(ROOT / "server", member_data, {
         "MEMBER_PLATFORM_DATA_DIR": str(member_data),
         "MEMBER_PLATFORM_DB_PATH": str(member_data / "service.db"),
         "MEMBER_PLATFORM_ROLE": "authoritative",

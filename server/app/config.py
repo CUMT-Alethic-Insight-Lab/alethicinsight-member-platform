@@ -21,9 +21,6 @@ def validate():
         raise RuntimeError("MEMBER_PLATFORM_ROLE must be authoritative or edge")
     if PUBLIC_PREFIX and (not PUBLIC_PREFIX.startswith("/") or any(c not in "/-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" for c in PUBLIC_PREFIX)):
         raise RuntimeError("Invalid MEMBER_PLATFORM_PUBLIC_PREFIX")
-    exam_data = BASE_DIR.parents[1] / "server" / "data"
-    if DB_PATH == exam_data.resolve() or exam_data.resolve() in DB_PATH.parents:
-        raise RuntimeError("Member service cannot use the exam data directory")
     legacy = os.environ.get("ALE_THIC_DB_PATH")
     if legacy and DB_PATH == Path(legacy).resolve():
         raise RuntimeError("Member database must not reuse ALE_THIC_DB_PATH")

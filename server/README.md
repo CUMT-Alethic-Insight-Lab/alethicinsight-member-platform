@@ -1,6 +1,6 @@
-# 内部成员服务（第一阶段隔离）
+# 成员服务
 
-这是同仓 `member-platform/` 内独立运行的内部产品，不是考试应用的路由别名。工作目录必须为本目录，启动模块为本目录 `app.main:app`；不要在仓库根以原 `server` 的 `PYTHONPATH` 启动它。
+这是 `alethicinsight-member-platform` 的独立成员服务，不是考试应用的路由别名。工作目录为本仓 `server/`，启动模块为 `app.main:app`；不要注入独立考试 checkout 的 `PYTHONPATH`。产品安装入口见 [根 README](../README.md)，完整操作见 [运行手册](../docs/AGENT_INTERFACE_MVP.md)。
 
 ## 隔离与安全边界
 
@@ -13,20 +13,20 @@
 - 网页/CLI 授权仍分离：CLI 只获显式短时 scope，不能使用网页管理接口、签发正式申请确认或代替人工提交。原页面的授权同意、草稿/规范化预览、内容绑定的一次性确认、幂等重试、审批池及审计语义完整保留。
 - 改角色/重置密码删除全部网页登录会话、撤销全部 CLI grant 和未兑换 code；本人改密保留当前网页会话，撤销其他会话、所有 CLI grant 与未兑换 code。退出登录撤销该网页会话；CLI 撤销继续支持 `/api/v1/auth/cli/grants/self`。
 - 登录失败按账号及实际连接 IP 持久限流（10 次/10 分钟）；不直接相信任意 `X-Forwarded-For`/CF 头。反代必须限制直连并通过 uvicorn 的受信代理配置提供真实 `request.client`；不要使用 `--forwarded-allow-ips '*'` 对不受信网络开放。CLI 授权另有限流和兑换尝试次数限制。
-- 当前没有成员服务自动清理/备份任务；组织申请/审计不会被考试回收误删。备份、保留策略、TLS、凭据托管、部署及真正独立仓映射需单独审查，不在此阶段自动执行。
+- 当前没有成员服务自动清理/备份任务；组织申请/审计不归考试回收任务管理。备份、保留策略、TLS、凭据托管和生产部署需单独审查，不由本地启动命令自动执行。考试资格仅可通过明确录取结果经授权交接，不共库或自动同步账号。
 
 ## 本地启动（PowerShell）
 
-在仓库根执行：
+在仓库根执行；上手示例统一显式使用 `member.db`，不改变未设置 `MEMBER_PLATFORM_DB_PATH` 时的默认文件名 `members.db`：
 
 ```powershell
-cd member-platform/server
+cd server
 python -m venv .venv
 .venv/Scripts/python -m pip install -r requirements.txt
 # 仅首次初始化生成；受控保留此值，重启时恢复原值，不重新生成
 $env:MEMBER_PLATFORM_SECRET_KEY = (& .venv/Scripts/python -c "import secrets; print(secrets.token_urlsafe(48))")
 $env:MEMBER_PLATFORM_DATA_DIR = "$PWD/data"
-$env:MEMBER_PLATFORM_DB_PATH = "$PWD/data/members.db"
+$env:MEMBER_PLATFORM_DB_PATH = "$PWD/data/member.db"
 .venv/Scripts/python scripts/bootstrap_member.py --student-id local-owner
 .venv/Scripts/python -m uvicorn app.main:app --host 127.0.0.1 --port 8902
 ```
@@ -53,27 +53,28 @@ bootstrap 会交互读取两次临时管理员密码（不少于 12 字符，不
 仅从已准备好的本地、获批公开/成员文档克隆读取，不访问网络，不导入考试资料：
 
 ```powershell
-.venv/Scripts/python scripts/sync_org_knowledge.py --local-dir C:/work/governance-public --revision <完整40位commit>
+.venv/Scripts/python scripts/sync_org_knowledge.py --local-dir C:/work/governance-public --revision FULL_40_HEX_COMMIT
 ```
 
 数据库须先经 bootstrap 或服务启动初始化。可用 `--allowlist approved-documents.json` 指定严格白名单；默认仅含治理仓三个制度文档。保留原有路径逃逸、隐藏文件、可见性、大小及幂等同步检查。
 
 ## 测试
 
-在仓库根、包含集成后的内部 CLI/MCP 包时，标准命令：
+在本仓根目录、成员开发环境中执行：
 
 ```powershell
-python -m pytest member-platform/server/tests -q
+python -m pytest server/tests -q
 ```
 
-测试包含适配的 m31–34、m37–39（不复制 m35 CLI/凭据权限或 m36 MCP 单测）、新增成员登录管理/数据库隔离/生命周期边界，以及真实独立 uvicorn + CLI + MCP 申请闭环。Node.js 用于已有组织页面 DOM 合约测试。所有测试只使用临时合成数据。
+标准成员测试不需要考试源码。测试包含 m31–34、m37–39、成员登录管理/数据库隔离/生命周期边界，以及独立 uvicorn + CLI + MCP 的合成申请闭环。Node.js 用于已有组织页面 DOM 合约测试；缺少 Node.js 的跳过需如实记录，不等于真实浏览器验收。
 
-本服务工作树尚未集成新 CLI 包时，显式指定原 infra 源验证，不写入或修改 CLI 文件：
+CLI/MCP 包的独立单测在包内运行：
 
 ```powershell
-$env:MEMBER_PLATFORM_TEST_CLI_SOURCE = "$PWD/infra/interface/alethicinsight-cli"
-python -m pytest member-platform/server/tests -q
-Remove-Item Env:MEMBER_PLATFORM_TEST_CLI_SOURCE
+Push-Location infra/interface/alethicinsight-cli
+python -m pip install '.[test]'
+python -m pytest -q
+Pop-Location
 ```
 
-默认 CLI 测试路径始终为 `member-platform/infra/interface/alethicinsight-cli`，缺包会失败而非静默跳过。集成树必须取消此临时覆盖再运行标准命令。
+默认 CLI 源为本仓 `infra/interface/alethicinsight-cli`，缺包应失败，不依赖相邻考试仓或临时来源覆盖。跨产品测试单独位于 `integration/test_cross_product_http.py`，仅在显式设置 `EXAM_PLATFORM_SOURCE` 后执行；独立考试依赖和命令见 [验收门禁](../docs/agent-interface/docs/09-roadmap-and-acceptance.md)。本页列操作步骤，不预填测试通过数或生产完成状态。

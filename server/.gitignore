@@ -6,3 +6,12 @@ data/
 *.db-journal
 *.db-wal
 *.db-shm
+
+!tests/fixtures/*.db
+!tests/fixtures/**/*.db
+!tests/fixtures/*.sqlite
+!tests/fixtures/**/*.sqlite
+!tests/fixtures/*.sqlite3
+!tests/fixtures/**/*.sqlite3
+!tests/fixtures/*.log
+!tests/fixtures/**/*.log

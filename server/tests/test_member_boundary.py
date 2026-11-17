@@ -226,6 +226,25 @@ def test_environment_is_namespaced_and_shared_secret_db_rejected(tmp_path, monke
         config.validate()
 
 
+def test_standalone_database_path_has_no_implicit_exam_checkout(tmp_path, monkeypatch):
+    server = tmp_path / "member-checkout" / "server"
+    monkeypatch.setattr(config, "BASE_DIR", server)
+    monkeypatch.delenv("ALE_THIC_DB_PATH", raising=False)
+    monkeypatch.delenv("ALE_THIC_DATA_DIR", raising=False)
+    for path in (server / "data" / "members.db", tmp_path / "server" / "data" / "members.db"):
+        monkeypatch.setattr(config, "DB_PATH", path)
+        config.validate()
+
+
+@pytest.mark.parametrize("relative_path", ["members.db", "nested/members.db"])
+def test_explicit_exam_data_directory_rejected(tmp_path, monkeypatch, relative_path):
+    exam_data = tmp_path / "explicit-exam-data"
+    monkeypatch.setenv("ALE_THIC_DATA_DIR", str(exam_data))
+    monkeypatch.setattr(config, "DB_PATH", exam_data / relative_path)
+    with pytest.raises(RuntimeError, match="must not use the exam data directory"):
+        config.validate()
+
+
 def test_pages_have_member_only_session_and_login_entry(member_client):
     page = member_client.get("/login")
     assert page.status_code == 200 and '/static/login.js' in page.text
