@@ -4,7 +4,7 @@
 
 ## 独立仓来源
 
-- 原库：`alethicinsight-platform`。考试产品保留此现名，不在本次擅自更名。
+- 历史原库名：`alethicinsight-platform`。该考试仓现已按授权恢复为 [`recruitment-exam-platform`](https://github.com/CUMT-Alethic-Insight-Lab/recruitment-exam-platform)，旧 GitHub URL 保留重定向；下列来源基线、提交与 PR #6 仍按当时的仓名记录，不追改历史。
 - 原库 PR #6 已 MERGED，`origin/main` 来源基线为 `9dc7229`（完整 SHA：`9dc7229cae1ee709c89a243e035b2685a11f2475`）。
 - 从原成员子树 `member-platform` 通过 `git subtree` 分离；subtree 提交为 `da82783`（完整 SHA：`da827835222ac1ef30aac4d86b091afb32e27468`）。
 - 新成员仓名：`alethicinsight-member-platform`；仓根就是原成员子树根，当前路径为 `server/` 和 `infra/interface/alethicinsight-cli/`，命令不再带旧子树前缀。
@@ -16,7 +16,9 @@
 
 此前把招新平台增量扩展为成员平台并复用账号/DB/启动流程的方案已撤销。来源旧混合基线 `229e69c` 不能当作当前成员架构；技术复用不表示运行状态共享。
 
-PR #6 完成的是同仓的成员/考试运行边界整理；当前再将成员子树分离为独立仓。原“第一阶段同仓、独立仓映射待定”的文案不再是当前操作依据。`server/` 在本仓明确指成员服务，不能误读为考试服务。
+PR #6 完成的是同仓的成员/考试运行边界整理；随后将成员子树分离为本独立仓。原“第一阶段同仓、独立仓映射待定”的文案不再是当前操作依据。`server/` 在本仓明确指成员服务，不能误读为考试服务。
+
+考试仓名称恢复不等于源码清理完成：考试仓根 `server/` 仅提供考试运行能力，但其 `main` 仍有 `member-platform/` 副本，待 [PR #7](https://github.com/CUMT-Alethic-Insight-Lab/recruitment-exam-platform/pull/7) 移除。本次只对齐成员文档中的当前仓名与 checkout 示例，不宣称该 PR 已合并或源码已去重；既有本地 checkout、历史证据与保全路径不因远端更名而自动改名。
 
 保留的成员契约为独立账号/DB/会话/CLI grant、逐请求角色/scope/ACL、内容绑定网页确认和幂等提交、网页 admin 审核。CLI/MCP 仍为内部 infra 一个包/版本，正式入口和 `/api/v1` API 名不改。
 

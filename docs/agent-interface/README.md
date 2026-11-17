@@ -2,7 +2,7 @@
 
 面向认证内部成员的知识、项目与事务接口。网页、REST、CLI 和个人 Agent 可采用不同工具，但使用同一成员业务契约；不是公众聊天 AI、自动经营组织或自主审批系统。
 
-本设计属于独立成员仓 `alethicinsight-member-platform`：`server/` 为成员服务，`infra/interface/alethicinsight-cli/` 为同包 CLI/MCP。考试属于独立 `alethicinsight-platform`；不共用账号、DB、密钥、会话或生命周期。源码与文档不证明新仓已发布或生产已部署。
+本设计属于独立成员仓 `alethicinsight-member-platform`：`server/` 为成员服务，`infra/interface/alethicinsight-cli/` 为同包 CLI/MCP。考试属于独立 `recruitment-exam-platform`；不共用账号、DB、密钥、会话或生命周期。源码与文档不证明新仓已发布或生产已部署。
 
 ## 使用入口
 
@@ -52,4 +52,4 @@
 
 公共上手归 `open-onboarding`，学习索引归 `awesome-ai`，正式制度引用 `governance-public`，私有运维归 `infra-handoff`。CLI 与 stdio MCP 同一个 `alethicinsight-cli` 发行包/版本，归成员 infra，不另建 MCP 仓。已独立的 exam-kit 不属于成员产品；Frontend-Templates 完全不改。
 
-成员仓为 `alethicinsight-member-platform`，考试保留现名 `alethicinsight-platform`。可通过明确录取结果经授权交接成员资格，但不共 DB、不自动同步考生资料。新仓名称不代表已发布，不编造未经核验的远端 URL；不部署、不读秘密、不迁移真实数据。参见[产品边界](../REPOSITORY_BOUNDARIES.md)与[迁移记录](../migration.md)。
+成员仓为 `alethicinsight-member-platform`，考试仓已按授权恢复为 `recruitment-exam-platform`。可通过明确录取结果经授权交接成员资格，但不共 DB、不自动同步考生资料。新仓名称不代表已发布，不编造未经核验的远端 URL；不部署、不读秘密、不迁移真实数据。参见[产品边界](../REPOSITORY_BOUNDARIES.md)与[迁移记录](../migration.md)。

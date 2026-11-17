@@ -1,6 +1,6 @@
 # 内部成员平台 MVP：本地运行与人工运维手册
 
-本手册服务于独立成员仓 `alethicinsight-member-platform`，布局为成员 `server/` 与内部接口包 `infra/interface/alethicinsight-cli/`。考试属于独立 `alethicinsight-platform`，不在本仓启动；新仓名称不代表已经发布或生产部署。来源与历史证据仅见 [migration.md](migration.md)。
+本手册服务于独立成员仓 `alethicinsight-member-platform`，布局为成员 `server/` 与内部接口包 `infra/interface/alethicinsight-cli/`。考试属于独立 `recruitment-exam-platform`，不在本仓启动；新仓名称不代表已经发布或生产部署。来源与历史证据仅见 [migration.md](migration.md)。
 
 - [产品安装入口](../README.md)、[infra 安装入口](../infra/README.md)
 - [API 与工作流](agent-interface/docs/04-api-and-workflows.md)、[OpenAPI](agent-interface/contracts/openapi-skeleton.yaml)
@@ -142,7 +142,7 @@ python -m pip wheel --no-deps ./infra/interface/alethicinsight-cli --wheel-dir /
 跨产品 HTTP 测试单独在 `integration/test_cross_product_http.py`，另建集成环境安装两边依赖，并显式选择考试 checkout 根；不纳入 `server/tests/`，不猜测邻仓：
 
 ```sh
-export EXAM_PLATFORM_SOURCE='/absolute/path/to/alethicinsight-platform'
+export EXAM_PLATFORM_SOURCE='/absolute/path/to/recruitment-exam-platform'
 python -m pip install -r server/requirements.txt
 python -m pip install -r "$EXAM_PLATFORM_SOURCE/server/requirements.txt"
 python -m pytest integration/test_cross_product_http.py -q

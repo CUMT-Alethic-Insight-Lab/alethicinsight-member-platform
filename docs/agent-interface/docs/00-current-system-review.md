@@ -2,7 +2,7 @@
 
 ## 当前产品
 
-`alethicinsight-member-platform` 是独立成员仓，根 `server/` 运行成员应用，`infra/interface/alethicinsight-cli/` 提供同包 CLI/本地 stdio MCP。考试产品位于独立 `alethicinsight-platform`，不在本仓运行。来源与撤销方案仅记录于 [迁移记录](../../migration.md)，不作为当前安装步骤。
+`alethicinsight-member-platform` 是独立成员仓，根 `server/` 运行成员应用，`infra/interface/alethicinsight-cli/` 提供同包 CLI/本地 stdio MCP。考试产品位于独立 `recruitment-exam-platform`，不在本仓运行。来源与撤销方案仅记录于 [迁移记录](../../migration.md)，不作为当前安装步骤。
 
 - FastAPI/Pydantic/SQLite 与 vanilla JS 是成员产品的技术栈，不表示继承考试账号、密钥、DB 或部署拓扑。
 - 成员网页登录使用不透明 Bearer session，不是 Cookie 或 OAuth/OIDC；CLI 使用一次性 code 交换短时、可撤销 grant，不能复用网页 token。

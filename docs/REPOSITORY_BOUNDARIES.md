@@ -8,9 +8,11 @@
 - `server/tests/` 与包内 `tests/`：标准成员/接口包测试，不依赖考试源码。
 - `integration/test_cross_product_http.py`：可选跨产品 HTTP 集成测试；显式 `EXAM_PLATFORM_SOURCE` 选择独立考试 checkout，不能猜测相邻目录或依赖同仓布局。
 
-## 考试产品：alethicinsight-platform
+## 考试产品：recruitment-exam-platform
 
-考试仓名称保持现状，不擅自重命名。招新报名、机试、评审、交卷、考生资料、考试生命周期和 exam-kit 协议属于考试产品，不属于成员服务。本仓不启动考试维护任务，不复用考试部署脚本、edge 暂存转发或 `/recruitment` 路由。
+考试仓已按授权恢复为 [`recruitment-exam-platform`](https://github.com/CUMT-Alethic-Insight-Lab/recruitment-exam-platform)，旧 GitHub URL 保留重定向；本次只对齐成员文档，不再执行重命名。招新报名、机试、评审、交卷、考生资料、考试生命周期和 exam-kit 协议属于考试产品，不属于成员服务。本仓不启动考试维护任务，不复用考试部署脚本、edge 暂存转发或 `/recruitment` 路由。
+
+考试仓根 `server/` 仅提供考试运行能力；其 `main` 仍保留待 [PR #7](https://github.com/CUMT-Alethic-Insight-Lab/recruitment-exam-platform/pull/7) 移除的 `member-platform/` 副本。运行边界独立不等于源码已去重，仓名恢复也不代表 PR 已合并。
 
 两套产品独立安装/启动，分别配置环境、密钥、DB、数据目录、账号、会话、CLI grant、权限、备份和生命周期。相同账号标识不等于同一身份，考试 admin 不继承成员 admin；不共享 DB、不复制旧 token、不从考试库读取成员资格。
 

@@ -6,7 +6,7 @@
 
 | ID | 决策 | 边界与理由 |
 | --- | --- | --- |
-| D00 | 成员与考试为独立产品和独立源码仓 | 成员 `alethicinsight-member-platform`，考试保留 `alethicinsight-platform`；不擅自重命名 |
+| D00 | 成员与考试为独立产品和独立源码仓 | 成员 `alethicinsight-member-platform`，考试仓经授权恢复为 `recruitment-exam-platform`；仅对齐文档，不再执行重命名 |
 | D00-layout | 本仓根 `server/` 为成员服务，`infra/` 为内部接口包 | 独立 DB/账号/密钥/会话/权限/生命周期与进程，不依赖共同父仓 |
 | D00-handoff | 录取结果可经明确授权交接至成员维护 | 不共库、不自动同步考生资料或 token；当前无自动交接接口 |
 | D01 | 成员网页沿用不透明 Bearer 机制；CLI 用独立短时 grant | 仅本成员库账号/会话；一次性 `request_id + code`，不是 OAuth/OIDC，考试 token 不可复用 |

@@ -6,7 +6,7 @@
 
 - 使用已具备成员仓 `server/requirements.txt`、考试仓 `server/requirements.txt` 依赖的 Python 环境；先核对现有环境，不要为此测试盲目安装依赖。
 - 普通成员测试包含 Node.js 驱动的前端检查，需要 Node.js；CLI wheel 验收需要现有 `setuptools>=68`、`wheel`、`pip` 和 Python `venv` 支持。
-- `EXAM_PLATFORM_SOURCE` 必须指向考试平台（`alethicinsight-platform`）的独立源码 checkout **根目录**，该目录下应存在 `server/app/main.py`、`server/app/routes/campaigns.py` 和 `server/app/routes/exam.py`。不能指向成员仓或考试仓的 `server` 子目录。
+- `EXAM_PLATFORM_SOURCE` 必须指向考试平台（`recruitment-exam-platform`）的独立源码 checkout **根目录**，该目录下应存在 `server/app/main.py`、`server/app/routes/campaigns.py` 和 `server/app/routes/exam.py`。不能指向成员仓或考试仓的 `server` 子目录。
 - checkout 只用来读取/运行源码，不使用实际服务、账号、数据库或生产密钥，也不执行部署。
 
 以下命令都从本成员仓根目录运行。
@@ -33,14 +33,14 @@ python -m pytest -q infra/interface/alethicinsight-cli/tests/test_m36_org_mcp.py
 Git Bash / POSIX shell 示例（将路径换成自己的考试 checkout）：
 
 ```sh
-EXAM_PLATFORM_SOURCE='/path/to/alethicinsight-platform' \
+EXAM_PLATFORM_SOURCE='/path/to/recruitment-exam-platform' \
   python -m pytest -q integration/test_cross_product_http.py
 ```
 
 PowerShell 示例：
 
 ```powershell
-$env:EXAM_PLATFORM_SOURCE = 'C:/path/to/alethicinsight-platform'
+$env:EXAM_PLATFORM_SOURCE = 'C:/path/to/recruitment-exam-platform'
 python -m pytest -q integration/test_cross_product_http.py
 Remove-Item Env:EXAM_PLATFORM_SOURCE
 ```

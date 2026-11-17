@@ -23,7 +23,7 @@ flowchart TB
   Git --> GT[Gitea]
 ```
 
-**图中仅是成员产品内部的逻辑结构**，Resource、GitHub/Gitea 连接器和官网模型包含后续设计，不表示均已实现。成员仓 `alethicinsight-member-platform` 的 `server/` 与 `infra/` 独立于考试仓 `alethicinsight-platform`；成员有自己的进程、DB、账号、密钥、会话、权限和生命周期，不只是 router 分组。
+**图中仅是成员产品内部的逻辑结构**，Resource、GitHub/Gitea 连接器和官网模型包含后续设计，不表示均已实现。成员仓 `alethicinsight-member-platform` 的 `server/` 与 `infra/` 独立于考试仓 `recruitment-exam-platform`；成员有自己的进程、DB、账号、密钥、会话、权限和生命周期，不只是 router 分组。
 
 在成员产品内部可采用少数进程 + 独立 SQLite + 本地 CLI，不要求微服务化；不要把“一套 DB”理解为与考试共库。4GB 仅为待实测硬件设计约束而非容量证明，尽量避免 Kubernetes、复杂队列与向量库。双服务隔离须代码与合成数据验证，见[验收](09-roadmap-and-acceptance.md)。
 

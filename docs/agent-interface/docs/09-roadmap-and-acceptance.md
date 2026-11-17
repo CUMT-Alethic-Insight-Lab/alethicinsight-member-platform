@@ -2,7 +2,7 @@
 
 ## 事实边界
 
-成员产品在 `alethicinsight-member-platform` 独立安装/启动，`server/` 只运行成员应用，`infra/` 是同包 CLI/MCP。考试产品保留独立仓 `alethicinsight-platform`，不假定存在相邻目录或共享父仓。来源历史见 [迁移记录](../../migration.md)。
+成员产品在 `alethicinsight-member-platform` 独立安装/启动，`server/` 只运行成员应用，`infra/` 是同包 CLI/MCP。考试产品保留独立仓 `recruitment-exam-platform`，不假定存在相邻目录或共享父仓。来源历史见 [迁移记录](../../migration.md)。
 
 代码存在、自动测试、本地 HTTP、真实浏览器、真实 Agent Host 和生产部署是不同证据。[API 契约](04-api-and-workflows.md)与 [运行手册](../../AGENT_INTERFACE_MVP.md)不替代执行验证，也不证明远端已发布。
 
@@ -25,7 +25,7 @@ python -m pip wheel --no-deps ./infra/interface/alethicinsight-cli --wheel-dir /
 在另一个全新集成测试环境中，从本仓根执行，先替换为已经审核的本地考试 checkout：
 
 ```sh
-export EXAM_PLATFORM_SOURCE='/absolute/path/to/alethicinsight-platform'
+export EXAM_PLATFORM_SOURCE='/absolute/path/to/recruitment-exam-platform'
 python -m pip install -r server/requirements.txt
 python -m pip install -r "$EXAM_PLATFORM_SOURCE/server/requirements.txt"
 python -m pytest integration/test_cross_product_http.py -q
@@ -34,7 +34,7 @@ python -m pytest integration/test_cross_product_http.py -q
 PowerShell：
 
 ```powershell
-$env:EXAM_PLATFORM_SOURCE = 'C:/work/alethicinsight-platform'
+$env:EXAM_PLATFORM_SOURCE = 'C:/work/recruitment-exam-platform'
 python -m pip install -r server/requirements.txt
 python -m pip install -r "$env:EXAM_PLATFORM_SOURCE/server/requirements.txt"
 python -m pytest integration/test_cross_product_http.py -q
