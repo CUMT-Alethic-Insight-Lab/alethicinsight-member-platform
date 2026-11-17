@@ -4,7 +4,7 @@
 
 本页以 Ubuntu 24.04、Intel N5095、4GB 内存与 512GB SSD 作为待实测的设计约束，不是已部署机器或容量证明。成员产品不继承考试 `/recruitment`、edge 回源/暂存、账号或 DB。
 
-成员在 `alethicinsight-member-platform` 独立安装/运行，考试保留独立 `alethicinsight-platform`。下文仅是成员运维方案，不是生产执行记录。Gitea/连接器/官网模型未交付，域名/反代、RPO/RTO、服务账号和真实数据迁移另审。
+成员在 `alethicinsight-member-platform` 独立安装/运行，考试位于独立 `recruitment-exam-platform`。下文仅是成员运维方案，不是生产执行记录。Gitea/连接器/官网模型未交付，域名/反代、RPO/RTO、服务账号和真实数据迁移另审。
 
 ## 本地入口与未来拓扑
 

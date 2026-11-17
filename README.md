@@ -50,9 +50,9 @@ CLI/MCP 只读取、校验和准备草稿。本人必须在可信 `/org` 网页�
 
 ## 独立产品边界
 
-本仓 `server/` 独立于考试仓 `alethicinsight-platform`，`infra/` 只通过成员 REST 访问业务，不直接读库。两套产品分别拥有进程、配置、密钥、数据目录、数据库、账号、会话、授权、权限与生命周期。考试管理员不自动成为成员管理员；相同账号标识不表示共享身份。
+本仓 `server/` 独立于考试仓 [`recruitment-exam-platform`](https://github.com/CUMT-Alethic-Insight-Lab/recruitment-exam-platform)，`infra/` 只通过成员 REST 访问业务，不直接读库。两套产品分别拥有进程、配置、密钥、数据目录、数据库、账号、会话、授权、权限与生命周期。考试管理员不自动成为成员管理员；相同账号标识不表示共享身份。
 
-考试录取后可以通过**经负责人确认的明确录取结果交接**进入成员维护流程，但不共用 DB、不自动导入考生档案、不继承考试 token。当前不提供自动跨产品同步接口。考试仓名称保持不变，不在本次擅自重命名。详见 [产品与仓库职责](docs/REPOSITORY_BOUNDARIES.md)。
+考试录取后可以通过**经负责人确认的明确录取结果交接**进入成员维护流程，但不共用 DB、不自动导入考生档案、不继承考试 token。当前不提供自动跨产品同步接口。考试仓名已按授权恢复；本次仅更新成员文档，不再执行重命名。考试仓 `main` 中的成员副本仍待 [PR #7](https://github.com/CUMT-Alethic-Insight-Lab/recruitment-exam-platform/pull/7) 移除，不能视为已完成源码去重。详见 [产品与仓库职责](docs/REPOSITORY_BOUNDARIES.md)。
 
 ## 开发验证
 

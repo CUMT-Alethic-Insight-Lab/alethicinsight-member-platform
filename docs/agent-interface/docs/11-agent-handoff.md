@@ -4,7 +4,7 @@
 
 先读 [产品边界](../../REPOSITORY_BOUNDARIES.md)、[API](04-api-and-workflows.md)、[验收](09-roadmap-and-acceptance.md)、[决策](10-decision-register.md)和 [运行手册](../../AGENT_INTERFACE_MVP.md)。源码来源和已撤销方案仅见 [迁移记录](../../migration.md)。
 
-工作根是 `alethicinsight-member-platform`，`server/` 为成员服务，`infra/interface/alethicinsight-cli/` 为内部接口包。考试在独立 `alethicinsight-platform`，不擅自重命名、不假设同仓，不在成员代码中导入考试 app。新仓名称不代表已经推送、发布或部署。
+工作根是 `alethicinsight-member-platform`，`server/` 为成员服务，`infra/interface/alethicinsight-cli/` 为内部接口包。考试在独立 `recruitment-exam-platform`，仓名已恢复；不再执行重命名、不假设同仓，不在成员代码中导入考试 app。新仓名称不代表已经推送、发布或部署。
 
 ## 维护检查清单
 
